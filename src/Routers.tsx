@@ -2,8 +2,10 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import Home from './pages/Home';
 import Bookshelf from './pages/Bookshelf';
+import BookReader from './pages/BookReader';
+import { RootStackParamList } from './models/BookModel';
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator<RootStackParamList>();
 
 export default () => {
   const getDefaultTitleOption = (title: string, options?: any) => {
@@ -34,6 +36,11 @@ export default () => {
         name="Bookshelf"
         component={Bookshelf}
         options={getDefaultTitleOption('书架')}
+      />
+      <Stack.Screen
+        name="BookReader"
+        component={BookReader}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );

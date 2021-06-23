@@ -13,3 +13,11 @@ export interface IShelfItem {
   children?: Array<IShelfItem>;
   bookInfo?: IBookInfo;
 }
+
+export type RootStackParamList = {
+  Home: undefined;
+  Bookshelf: undefined;
+  BookReader: {
+    bookInfo: IBookInfo;
+  };
+};

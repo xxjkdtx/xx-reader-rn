@@ -17,7 +17,8 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-
+import { StackNavigationProp } from '@react-navigation/stack';
+import { ParamListBase } from '@react-navigation/routers';
 const Section: React.FC<{
   title: string;
 }> = ({ children, title }) => {
@@ -46,7 +47,11 @@ const Section: React.FC<{
   );
 };
 
-const App = ({ navigation }) => {
+interface IProps {
+  navigation: StackNavigationProp<ParamListBase>;
+}
+
+const App = ({ navigation }: IProps) => {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {

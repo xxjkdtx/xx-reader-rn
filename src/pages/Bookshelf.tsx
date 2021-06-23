@@ -1,11 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  Alert,
+} from 'react-native';
 
 import { IShelfItem } from '../models/BookModel';
 import { demoShelfItem } from '../models/getDemoData';
 import BookItem from '../components/bookshelf/BookItem';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import PopShelfModal from '../components/bookshelf/PopShelfModal';
+import { requestPromission } from '../utils/fileUtils';
+import { useDispatch } from 'react-redux';
+import { isExistFile } from '../utils/fileUtils';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { ParamListBase } from '@react-navigation/routers';
 
 const styles = StyleSheet.create({
   main: {
@@ -31,10 +42,16 @@ const styles = StyleSheet.create({
   blankItem: {},
 });
 
-const Bookshelf = () => {
+interface IProps {
+  navigation: StackNavigationProp<ParamListBase>;
+}
+
+const Bookshelf = ({ navigation }: IProps) => {
   const [itemList, setItemList] = useState<Array<IShelfItem>>([]);
   const [popShelfVisible, setPopSHelfVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState<IShelfItem | null>(null);
+
+  const dispatch = useDispatch();
 
   const getShelfItemList = () => {
     demoShelfItem().then((res: Array<IShelfItem>) => {
@@ -52,15 +69,30 @@ const Bookshelf = () => {
   };
 
   useEffect(() => {
+    requestPromission().then((res) => {
+      console.info(res);
+      if (res) {
+        dispatch({
+          message: res,
+          type: 'SHOW_SNACK',
+        });
+      }
+    });
     getShelfItemList();
-  }, []);
+  }, [dispatch]);
 
-  const onShelfItemPress = (item: IShelfItem) => {
+  const onShelfItemPress = async (item: IShelfItem) => {
     if (item.children) {
       setSelectedItem(item);
       setPopSHelfVisible(true);
     } else if (item.bookInfo) {
       console.info('open book ' + item.title);
+      const isExist = await isExistFile(item.bookInfo.fileSrc);
+      if (isExist) {
+        navigation.push('BookReader', { bookInfo: item.bookInfo });
+      } else {
+        Alert.alert('文件不存在');
+      }
     }
   };
 

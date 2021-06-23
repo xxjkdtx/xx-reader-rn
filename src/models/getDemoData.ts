@@ -9,7 +9,7 @@ export const demoShelfItem = () => {
           bookInfo: {
             type: 'TXT',
             progress: 1,
-            fileSrc: 'dda',
+            fileSrc: '/storage/emulated/0/Download/归向.txt',
           },
         },
         {
@@ -45,7 +45,7 @@ export const demoShelfItem = () => {
               bookInfo: {
                 type: 'TXT',
                 progress: 1,
-                fileSrc: 'dda',
+                fileSrc: '/storage/emulated/0/Download/归向.txt',
               },
             },
             {
